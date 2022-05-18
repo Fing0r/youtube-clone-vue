@@ -1,5 +1,5 @@
 <template>
-  <a href="#" @click="logi" :class="classes">{{ category }}</a>
+  <a href="#" :class="classes">{{ category }}</a>
 </template>
 
 <script>
@@ -14,9 +14,6 @@ export default {
           ? [...classes, "bg-gray-600", "border-gray-700", "hover:bg-gray-500", "text-white"]
           : [...classes, "bg-gray-100", "border-gray-300", "hover:bg-gray-200"]
     },
-    logi() {
-      console.log(123)
-    }
   },
 }
 
