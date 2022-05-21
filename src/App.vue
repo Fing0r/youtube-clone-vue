@@ -1,10 +1,12 @@
 <template>
-  <TheHeader/>
-  <TheSidebarSmall/>
-  <TheSidebar/>
-  <TheSidebarMobile/>
-  <TheCategories/>
-  <TheVideos/>
+  <TheHeader @toggle-sidebar="toggleSidebar"/>
+  <TheSidebarSmall :is-open="sidebarState === 'compact'"/>
+  <TheSidebar :is-open="sidebarState === 'normal'"/>
+  <TheSidebarMobile
+      :is-open="isMobileSidebarOpen"
+      @close="closeMobileSidebar"/>
+  <TheCategories :is-sidebar-open="sidebarState === 'normal'"/>
+  <TheVideos :is-sidebar-open="sidebarState === 'normal'"/>
 </template>
 
 <script>
@@ -23,10 +25,45 @@ export default {
     TheSidebar,
     TheSidebarSmall,
     TheHeader
-  }
+  },
+  data() {
+    return {
+      isMobileSidebarOpen: false,
+      sidebarState: null,
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      if (window.innerWidth >= 1280){
+        this.sidebarState = this.sidebarState === "normal" ? "compact" : "normal"
+      } else {
+        this.openMobileSidebar();
+      }
+    },
+    openMobileSidebar() {
+      this.isMobileSidebarOpen = true;
+    },
+    closeMobileSidebar() {
+      this.isMobileSidebarOpen = false;
+    }
+  },
+  mounted() {
+    if(window.innerWidth >= 768 && window.innerWidth < 1280) {
+      this.sidebarState = "compact";
+    }
+
+    if (window.innerWidth >= 1280) {
+      this.sidebarState = "normal";
+    }
+  },
 }
 </script>
 
 <style>
 
+html::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+div::-webkit-scrollbar {
+  display: none;
+}
 </style>
