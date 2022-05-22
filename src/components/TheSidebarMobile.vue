@@ -21,7 +21,8 @@
     <aside tabindex="-1"
            ref="mobileSidebar"
            @keydown.esc="$emit('close')"
-           v-show="isOpen" @click="$emit('close')"
+           v-show="isOpen"
+           @click="$emit('close')"
            class="w-64 max-h-screen overflow-auto bg-white z-40 fixed outline-none">
       <section class="flex items-center p-4 border-b sticky top-0 bg-white">
         <button @click="isOpen = false" class="ml-2 mr-6 focus:outline-none">

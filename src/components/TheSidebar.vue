@@ -13,13 +13,9 @@ export default {
   components: {
     SidebarContent
   },
-  props: {
-    isOpen: Boolean
-  },
   computed: {
     classes() {
       return [
-        this.isOpen ? "xl:block" : "hidden",
         "w-64",
         "max-h-screen",
         "fixed",

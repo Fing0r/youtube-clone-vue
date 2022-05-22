@@ -1,17 +1,17 @@
 <template>
   <TheHeader @toggle-sidebar="toggleSidebar"/>
-  <TheSidebarSmall :is-open="sidebarState === 'compact'"/>
-  <TheSidebar :is-open="sidebarState === 'normal'"/>
+  <TheSidebarCompact v-if="isCompactSidebarOpen"/>
+  <TheSidebar v-if="isNormalSidebarOpen"/>
   <TheSidebarMobile
       :is-open="isMobileSidebarOpen"
       @close="closeMobileSidebar"/>
-  <TheCategories :is-sidebar-open="sidebarState === 'normal'"/>
-  <TheVideos :is-sidebar-open="sidebarState === 'normal'"/>
+  <TheCategories :is-sidebar-open="isNormalSidebarOpen"/>
+  <TheVideos :is-sidebar-open="isNormalSidebarOpen"/>
 </template>
 
 <script>
 import TheHeader from "./components/TheHeader.vue";
-import TheSidebarSmall from "./components/TheSidebarSmall.vue";
+import TheSidebarCompact from "./components/TheSidebarCompact.vue";
 import TheSidebar from "./components/TheSidebar.vue";
 import TheSidebarMobile from "./components/TheSidebarMobile.vue";
 import TheCategories from "./components/TheCategories.vue";
@@ -23,38 +23,50 @@ export default {
     TheCategories,
     TheSidebarMobile,
     TheSidebar,
-    TheSidebarSmall,
+    TheSidebarCompact,
     TheHeader
   },
   data() {
     return {
       isMobileSidebarOpen: false,
-      sidebarState: null,
+      isCompactSidebarOpen: false,
+      isNormalSidebarOpen: false,
+      isCompactSidebarActive: false
     }
   },
   methods: {
     toggleSidebar() {
       if (window.innerWidth >= 1280){
-        this.sidebarState = this.sidebarState === "normal" ? "compact" : "normal"
+        this.isCompactSidebarActive = !this.isCompactSidebarActive;
+        this.onResize();
       } else {
         this.openMobileSidebar();
       }
     },
+    onResize() {
+      if (window.innerWidth < 768) {
+        this.isCompactSidebarOpen = false;
+        this.isNormalSidebarOpen = false;
+      } else if (window.innerWidth < 1280) {
+        this.isCompactSidebarOpen = true;
+        this.isNormalSidebarOpen = false;
+      } else {
+        this.isCompactSidebarOpen = this.isCompactSidebarActive;
+        this.isNormalSidebarOpen = !this.isCompactSidebarActive;
+        this.isMobileSidebarOpen = false;
+      }
+    },
+
     openMobileSidebar() {
-      this.isMobileSidebarOpen = true;
+    this.isMobileSidebarOpen = true;
     },
     closeMobileSidebar() {
-      this.isMobileSidebarOpen = false;
-    }
+    this.isMobileSidebarOpen = false;
+    },
   },
   mounted() {
-    if(window.innerWidth >= 768 && window.innerWidth < 1280) {
-      this.sidebarState = "compact";
-    }
-
-    if (window.innerWidth >= 1280) {
-      this.sidebarState = "normal";
-    }
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
   },
 }
 </script>
